@@ -36,3 +36,25 @@ export type OverviewResult = {
   cards: { label: string; value: number }[]
   modules: { name: string; created: number; pending: number; abnormal: number }[]
 }
+
+export type DashboardWindow = {
+  period: string
+  window: string
+  gross: number
+  actual: number
+  provisional_actual: number
+  value_source: string
+  published: boolean
+  batch_code: string
+  effective_round: number | null
+  basis: { formula: string; [key: string]: unknown }
+  pending_vouchers: { voucher_id: string; order_id: string; amount: number }[]
+  can_publish: boolean
+}
+
+export type DashboardActuals = {
+  dashboard_id: string
+  reference_date: string
+  metrics: DashboardWindow[]
+  source: string
+}

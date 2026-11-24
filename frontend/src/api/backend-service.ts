@@ -1,8 +1,41 @@
 import { request } from './client'
 import { moduleMeta } from '@/data/modules'
-import type { ActionResult, EntryRow, OverviewResult, PageResult } from '@/data/types'
+import type {
+  ActionResult,
+  DashboardActuals,
+  EntryRow,
+  OverviewResult,
+  PageResult,
+} from '@/data/types'
 
 export { moduleMeta }
+
+export async function loadDashboardActuals(): Promise<DashboardActuals> {
+  const response = await request('/api/recalc/dashboard')
+  if (!response.ok) throw new Error('看板实际指标金额读取失败')
+  return (await response.json()) as DashboardActuals
+}
+
+export async function importVouchers(
+  items: Record<string, string>[],
+): Promise<{ ok: boolean; message: string }> {
+  const response = await request('/api/recalc/vouchers/bulk', {
+    method: 'POST',
+    body: JSON.stringify({ items }),
+  })
+  return await response.json()
+}
+
+export async function runRecalcBatch(payload: {
+  batch_code: string
+  publish_policy: string
+}): Promise<{ ok: boolean; message: string }> {
+  const response = await request('/api/recalc/batches', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+  return await response.json()
+}
 
 export async function listEntries(
   key: string,
